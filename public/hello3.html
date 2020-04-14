@@ -1,0 +1,90 @@
+<!-- 1) hello3.js
+  firebase realtime database에 다음과 같이 데이터 항목을 추가하자.
+
+  (1) skhu-lsj 항목 옆의 + 버튼을 클릭하면 자식 노드가 생긴다
+  (2) 자식 노드에 myinfo 입력
+  (3) myinfo 노드 옆의 + 버튼을 세번 클릭하면 자식 노드가 3개 생긴다.
+  (4) 위 화면과 같이 입력하고
+  (5) 추가 버튼 클릭하여 저장
+
+  위와 같이 이름, 이메일, 학번을 입력하자.
+-->
+
+<html>
+<head>
+  <meta charset="utf-8" />
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script defer src="/__/firebase/7.13.1/firebase-app.js"></script>
+  <script defer src="/__/firebase/7.13.1/firebase-database.js"></script>
+  <script defer src="/__/firebase/init.js"></script>
+  <style>
+    body {
+        display: flex;
+        justify-content: center;
+        height: 100vh;
+        width: 100%;
+        flex-direction: column;
+        background: #ee9ca7; 
+        background: -webkit-linear-gradient(to right, #ffdde1, #ee9ca7);  
+        background: linear-gradient(to right, #ffdde1, #ee9ca7);
+
+    }
+    #app {
+        width: 300px;
+        height: 150px;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 3px 3px 5px #444;
+        background: -webkit-linear-gradient(to right, #ee0979, #ff6a00);
+        background: linear-gradient(to right, #ee0979, #ff6a00); 
+        margin: auto;
+        color: azure;
+    }
+    #app:hover {
+        transform: scale( 1.2 );
+        transition: 0.5s;
+    }
+    #name{
+        text-align: center;
+        font-size: 50px;
+        margin: 20px;
+        border-bottom: 3px solid white;
+    }
+    #info{
+        display: flex;
+        justify-content: space-around;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1 id ="name">{{ name }}</h1>
+    <div id="info">
+    <p id ="email">{{ email }}</p>
+    <p id ="no">{{ no }}</p>
+    </div>
+  </div>
+  <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {
+        name: '학생이름',
+        email: '이메일',
+        no: '학번'
+      }
+    })
+
+    window.onload = function() {
+      let Ref = firebase.database().ref("student");
+      Ref.on('value', (snapshot) => {
+        let student = snapshot.val();
+        console.log(student)
+        app.name = student.name;
+        app.email = student.email;
+        app.no = student.no;
+      });
+      console.log("완료")
+    };
+   </script>
+</body>
+</html>
