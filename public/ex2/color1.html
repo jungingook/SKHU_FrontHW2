@@ -1,0 +1,55 @@
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <style>   
+    #app{
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+    .bt{
+        border: 3px solid black ;
+        width: 20%;
+        margin: 5vh 5%; 
+        height: 20vh;
+        border-radius: 10px;
+        font-size:  20vh;
+        text-align: center;
+        box-shadow: 1vh 1vh 0 #77777760;
+    }
+    .click{
+        background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div v-bind:class="i == 'click'? 'click bt' :'bt' " v-for="(i, index) in arr" @click="thisclick(parseInt(index))">
+        {{index+1}}
+    </div>
+
+  </div>
+
+  <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {
+        arr: ['none','none','none','none','none','none','none','none','none']
+      },     
+      methods : {
+        thisclick : function(index){ 
+            if (this.arr[index] == 'click') {
+            Vue.set(this.arr,index, this.arr[index] = 'none')
+            } 
+            else {
+                Vue.set(this.arr,index, this.arr[index] = 'click')
+        
+            }
+        }
+      } 
+    })
+   </script>
+</body>    
+</html>
+
