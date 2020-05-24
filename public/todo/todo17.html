@@ -1,0 +1,78 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <link rel="stylesheet" type="text/css" href="todo1.css">
+  <style> ul { list-style-type: none; } </style>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>할 일</h1>
+    <ul>
+      <li v-for="(todo, key) in todoList">
+        <input type="checkbox" v-model="checked[key]" />
+        {{ todo.value }}
+      </li>
+    </li>
+    </ul>
+    <input type="text" v-model.trim="todo.value" />
+    <button type="button" v-on:click="addTodo" v-bind:disabled="!todo">🖊할일 추가</button>
+    <button type="button" v-on:click="deleteTodo" v-show="checkedCount > 0">❌삭제</button>
+  </div>
+
+  <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {
+        todoList: {},
+        checked: {},
+        todo: {},
+      },
+      computed: {
+        checkedCount: function() {
+          console.log(Object.keys(this.checked).length)
+          let count = 0;
+          let keylist = Object.keys(this.checked)
+          for (let i = 0; i < Object.keys(this.checked).length; ++i)
+            if (this.checked[keylist[i]]) {
+              ++count
+            }
+          return count;
+        }
+      },
+      methods: {
+        addTodo: function() {
+            axios.post('https://skhu-jungingook.firebaseio.com/todo1.json',this.todo)
+            .then(response => {
+                console.log('응답',response);
+                this.reload()
+            })        
+            .catch( error => {
+              console.log('에러',exrror)
+            })   
+        },
+        deleteTodo: function() {
+          let keylist = Object.keys(this.checked)
+          for (let i = 0; i < Object.keys(this.checked).length; ++i){
+            if (this.checked[keylist[i]]) {
+              axios.delete('https://skhu-jungingook.firebaseio.com/todo1/' + keylist[i] + '.json').then(response => {this.reload()})       
+            }
+          }
+
+        },
+        reload : function () {
+            axios.get('https://skhu-jungingook.firebaseio.com/todo1.json').then(response => app.todoList = response.data);
+        }
+      }
+    })
+
+    window.onload = function() {
+        console.log('데이터를 리로드 합니다.')
+        app.reload()
+    }
+   </script>
+</body>
+</html>
+
+
